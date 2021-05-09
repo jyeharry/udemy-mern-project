@@ -1,0 +1,1 @@
+{"ast":null,"code":"var __jsx = React.createElement;\nimport React from 'react';\nimport { HeaderMessage, FooterMessage } from '../components/Common/WelcomeMessage';\n\nfunction Login() {\n  return __jsx(React.Fragment, null, __jsx(HeaderMessage, null), __jsx(FooterMessage, null));\n}\n\nexport default Login;","map":null,"metadata":{},"sourceType":"module"}

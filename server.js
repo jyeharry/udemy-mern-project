@@ -1,3 +1,4 @@
+const express = require("express");
 const app = require('express')();
 const server = require('http').Server(app);
 const next = require('next');
@@ -9,6 +10,7 @@ require('dotenv').config({path: './config.env'});
 
 const connectDb = require('./utilsServer/connectDb');
 const PORT = process.env.PORT || 3000;
+app.use(express.json());
 
 connectDb();
 
