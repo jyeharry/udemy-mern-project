@@ -2,6 +2,9 @@ import React, {useState, useEffect, useRef} from 'react';
 import {Form, Button, Message, Segment, TextArea, Divider} from 'semantic-ui-react';
 
 import {HeaderMessage, FooterMessage} from '../components/Common/WelcomeMessage';
+import SocialInputs from '../components/Common/SocialInputs';
+
+const regexUsername = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
 
 function Signup() {
   const [user, setUser] = useState({
@@ -22,10 +25,18 @@ function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [formLoading, setFormLoading] = useState(false);
+  const [submitDisabled, setSubmitDisabled] = useState(true);
 
   const [username, setUsername] = useState('');
   const [usernameLoading, setUsernameLoading] = useState(false);
   const [usernameAvailable, setUsernameAvailable] = useState(false);
+
+  const [media, setMedia] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
+  const [highlighted, setHighlighted] = useState(false);
+  const inputRef = useRef();
+
+  useEffect(() => setSubmitDisabled(!(firstName && lastName && email && password)));
 
   const handleSubmit = (e) => e.preventDefault();
   const handleChange = (e) => {
@@ -62,6 +73,21 @@ function Signup() {
             required
           />
           <Form.Input
+            loading={usernameLoading}
+            error={!usernameAvailable}
+            label='Username'
+            placeholder='Username'
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setUsernameAvailable(regexUsername.test(e.target.value));
+            }}
+            fluid
+            icon={usernameAvailable ? 'check' : 'close'}
+            iconPosition='left'
+            required
+          />
+          <Form.Input
             label='Email'
             placeholder='Email'
             name='email'
@@ -89,6 +115,27 @@ function Signup() {
             iconPosition='left'
             type={showPassword ? 'text' : 'password'}
             required
+          />
+          <Form.Field
+            label='Bio'
+            control={TextArea}
+            name='bio'
+            value={bio}
+            onChange={handleChange}
+            placeholder='Bio...'
+          />
+          <SocialInputs
+            user={user}
+            showSocialLinks={showSocialLinks}
+            setShowSocialLinks={setShowSocialLinks}
+            handleChange={handleChange}
+          />
+          <Divider hidden/>
+          <Button
+            content='Sign up'
+            type='submit'
+            color='teal'
+            disabled={submitDisabled || !usernameAvailable}
           />
         </Segment>
       </Form>
