@@ -53,7 +53,7 @@ function Signup() {
   return (
     <>
       <HeaderMessage/>
-      <Form loading={formLoading} error={!errorMessage} onSubmit={handleSubmit}>
+      <Form loading={formLoading} error={!!errorMessage} onSubmit={handleSubmit}>
         <Message error header='Oops!' content={errorMessage} onDismiss={() => setErrorMessage(null)}/>
         <Segment>
           <ImageDropDiv
@@ -147,6 +147,7 @@ function Signup() {
           />
           <Divider hidden/>
           <Button
+            icon='signup'
             content='Sign up'
             type='submit'
             color='teal'
