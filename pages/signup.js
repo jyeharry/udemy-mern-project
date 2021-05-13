@@ -3,6 +3,7 @@ import {Form, Button, Message, Segment, TextArea, Divider} from 'semantic-ui-rea
 
 import {HeaderMessage, FooterMessage} from '../components/Common/WelcomeMessage';
 import SocialInputs from '../components/Common/SocialInputs';
+import ImageDropDiv from '../components/Common/ImageDropDiv';
 
 const regexUsername = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
 
@@ -34,13 +35,18 @@ function Signup() {
   const [media, setMedia] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null);
   const [highlighted, setHighlighted] = useState(false);
-  const inputRef = useRef();
+  const inputRef = useRef(null);
 
   useEffect(() => setSubmitDisabled(!(firstName && lastName && email && password)));
 
   const handleSubmit = (e) => e.preventDefault();
+
   const handleChange = (e) => {
-    const {name, value} = e.target;
+    const {name, value, files} = e.target;
+    if (name === 'media') {
+      setMedia(files[0]);
+      setMediaPreview(URL.createObjectURL(files[0]));
+    }
     setUser(prev => ({...prev, [name]: value}));
   }
 
@@ -50,6 +56,15 @@ function Signup() {
       <Form loading={formLoading} error={!errorMessage} onSubmit={handleSubmit}>
         <Message error header='Oops!' content={errorMessage} onDismiss={() => setErrorMessage(null)}/>
         <Segment>
+          <ImageDropDiv
+            mediaPreview={mediaPreview}
+            setMediaPreview={setMediaPreview}
+            setMedia={setMedia}
+            inputRef={inputRef}
+            highlighted={highlighted}
+            setHighlighted={setHighlighted}
+            handleChange={handleChange}
+          />
           <Form.Input
             label='First name'
             placeholder='First name'
